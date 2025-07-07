@@ -1,0 +1,1 @@
+# A simple MCP tool that make LLMs ready for new things

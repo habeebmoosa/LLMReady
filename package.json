@@ -1,0 +1,26 @@
+{
+  "name": "llm-ready-mcp",
+  "version": "1.0.0",
+  "description": "Turn the website inot LLM Ready Markdown",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && shx chmod +x build/*.js",
+    "start": "node build/index.js",
+    "dev": "tsc --watch"
+  },
+  "keywords": [],
+  "author": "Habeeb Moosa",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "jsdom": "^26.1.0",
+    "zod": "^3.25.75"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^24.0.10",
+    "shx": "^0.4.0",
+    "typescript": "^5.8.3"
+  }
+}
