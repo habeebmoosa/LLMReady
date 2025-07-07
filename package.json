@@ -1,7 +1,9 @@
 {
   "name": "llm-ready-mcp",
   "version": "1.0.0",
-  "description": "Turn the website inot LLM Ready Markdown",
+  "description": "Turn the websites, docs, etc. into LLM Ready Markdown",
+  "license": "MIT",
+  "author": "Habeeb Moosa",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -9,9 +11,12 @@
     "start": "node build/index.js",
     "dev": "tsc --watch"
   },
-  "keywords": [],
-  "author": "Habeeb Moosa",
-  "license": "ISC",
+  "keywords": [
+    "mcp",
+    "markdown",
+    "website",
+    "docs"
+  ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.15.0",
     "jsdom": "^26.1.0",

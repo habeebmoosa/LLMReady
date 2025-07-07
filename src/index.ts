@@ -1,16 +1,20 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+import { CallToolRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { JSDOM } from "jsdom";
+import { ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
-const server = new McpServer({
-    name: "LLMReadyMCP",
-    version: "1.0.0",
-    capabilities: {
-        resources: {},
-        tools: {},
+const server = new Server(
+    {
+        name: "LLMReadyMCP",
+        version: "1.0.0",
     },
-})
+    {
+        capabilities: {
+            tools: {},
+        },
+    }
+);
 
 async function extractTextFromUrl(url: string): Promise<string> {
     try {
@@ -24,30 +28,49 @@ async function extractTextFromUrl(url: string): Promise<string> {
     }
 }
 
-server.tool(
-    "website-to-markdown",
-    "Turn the website inot LLM Ready Markdown",
-    {
-        url: z.string().url().describe("This is the website url that will turn in LLM Ready Markdown")
-    },
-    async ({ url }) => {
-        try {
-            const textContent = await extractTextFromUrl(url);
+server.setRequestHandler(ListToolsRequestSchema, async () => {
+    return {
+        tools: [
+            {
+                name: "website-to-markdown",
+                description: "Turn the website inot LLM Ready Markdown",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        url: {
+                            type: "string",
+                            description: "This is the website url that will turn in LLM Ready Markdown"
+                        }
+                    },
+                    required: ["url"]
+                },
+                annotations: {
+                    title: "Get Website in Markdown"
+                }
+            }
+        ]
+    }
+})
+
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    const { name, arguments: args } = request.params;
+
+    if (!args) {
+        throw new Error(`No arguments provided for tool: ${name}`);
+    }
+
+    switch (name) {
+        case "website-to-markdown":
             return {
                 content: [{
                     type: "text",
-                    text: textContent
+                    text: await extractTextFromUrl(args.url as any)
                 }]
             }
-        } catch (error) {
-            return {
-                content: [{
-                    type: "text", text: `Error getting LLM ready markdown: ${error}`
-                }]
-            }
-        }
+        default:
+            throw new Error("Tool not found");
     }
-)
+})
 
 async function main() {
     const transport = new StdioServerTransport();
