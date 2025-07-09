@@ -1,13 +1,20 @@
 {
-  "name": "llm-ready-mcp",
+  "name": "@llmready/mcp",
   "version": "1.0.0",
   "description": "Turn the websites, docs, etc. into LLM Ready Markdown",
   "license": "MIT",
   "author": "Habeeb Moosa",
+  "homepage": "https://github.com/habeebmoosa/LLMReady",
+  "bugs": "https://github.com/habeebmoosa/LLMReady/issues",
   "type": "module",
-  "main": "index.js",
+  "bin": {
+    "llm-ready-mcp": "build/index.js"
+  },
+  "files": [
+    "build"
+  ],
   "scripts": {
-    "build": "tsc && shx chmod +x build/*.js",
+    "build": "tsc",
     "start": "node build/index.js",
     "dev": "tsc --watch"
   },
